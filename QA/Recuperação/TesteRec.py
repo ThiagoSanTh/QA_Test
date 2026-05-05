@@ -9,7 +9,7 @@ import os
 # ==============================
 
 DB_SISTEMA = "sistema.db"
-BACKUP_DB = "backup.db"
+DB_BACKUP = "backup.db"
 
 
 # ==============================
@@ -30,6 +30,17 @@ def criar_banco_sistema():
     conn.commit()
     conn.close()
 
+import os
+
+def deletar_banco_sistema():
+    if os.path.exists(DB_SISTEMA):
+        os.remove(DB_SISTEMA)
+        print(" Banco deletado.")
+
+def deletar_banco_backup():
+    if os.path.exists(DB_BACKUP):
+        os.remove(DB_BACKUP)
+        print(" Backup deletado.")
 
 def inserir_dado(valor):
     conn = sqlite3.connect(DB_SISTEMA)
@@ -56,13 +67,13 @@ def listar_dados():
 
 def criar_backup():
     if os.path.exists(DB_SISTEMA):
-        shutil.copy(DB_SISTEMA, BACKUP_DB)
-        print("� Backup criado.")
+        shutil.copy(DB_SISTEMA, DB_BACKUP)
+        print(" Backup criado.")
 
 
 def restaurar_backup():
-    if os.path.exists(BACKUP_DB):
-        shutil.copy(BACKUP_DB, DB_SISTEMA)
+    if os.path.exists(DB_BACKUP):
+        shutil.copy(DB_BACKUP, DB_SISTEMA)
         print("♻️ Banco restaurado.")
 
 
@@ -96,3 +107,21 @@ def teste_recuperacao():
         print(f"⏱️ Tempo de recuperação: {tempo:.2f}s")
 
         listar_dados()
+
+# ==============================
+# EXECUÇÃO
+# ==============================
+
+if __name__ == "__main__":
+    print("� INICIANDO SISTEMA DE TESTES")
+    deletar_banco_sistema()
+    deletar_banco_backup()
+
+
+    criar_banco_sistema()
+    inserir_dado("Dado inicial")
+    criar_backup()
+
+    teste_recuperacao()
+
+    print("\n✅ TESTES FINALIZADOS")

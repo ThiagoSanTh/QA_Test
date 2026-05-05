@@ -49,6 +49,11 @@ def criar_banco_usuarios():
     conn.commit()
     conn.close()
 
+def deletar_banco_usuarios():
+    if os.path.exists(DB_USUARIOS):
+        os.remove(DB_USUARIOS)
+        print(" Banco de usuários deletado.")
+
 
 def cadastrar_usuario(username, senha):
     conn = sqlite3.connect(DB_USUARIOS)
@@ -128,12 +133,7 @@ def teste_seguranca():
 
 if __name__ == "__main__":
     print("� INICIANDO SISTEMA DE TESTES")
-
-    criar_banco_sistema()
-    inserir_dado("Dado inicial")
-    criar_backup()
-
-    teste_recuperacao()
+    deletar_banco_usuarios()
     teste_seguranca()
 
     print("\n✅ TESTES FINALIZADOS")
